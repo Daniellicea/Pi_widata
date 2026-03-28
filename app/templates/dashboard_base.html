@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widata - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <!-- Navbar (Dashboard) -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url_for('main.index') }}">
+                <i class="fa-solid fa-chart-simple text-gradient me-2"></i> Widata
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <span class="fw-medium" style="color: var(--wi-text-secondary);"><i class="fa-regular fa-user me-1"></i> {{ current_user.nombre }}</span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light btn-sm rounded-pill px-3">Salir</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <nav class="sidebar shadow-sm">
+        <div class="py-2">
+            <p class="text-uppercase fw-bold px-4 mb-2 small" style="font-size: 0.75rem; color: var(--wi-text-muted);">Panel Principal</p>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'dashboard.index' %}active{% endif %}"
+                        href="{{ url_for('dashboard.index') }}">
+                        <i class="fa-solid fa-chart-pie me-2 text-center" style="width: 20px;"></i> Resumen
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'dashboard.estrategia' %}active{% endif %}"
+                        href="{{ url_for('dashboard.estrategia') }}">
+                        <i class="fa-solid fa-bolt me-2 text-center" style="width: 20px;"></i> Estrategias de Pago
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'dashboard.fugas' %}active{% endif %}"
+                        href="{{ url_for('dashboard.fugas') }}">
+                        <i class="fa-solid fa-magnifying-glass-chart me-2 text-center" style="width: 20px;"></i>
+                        Detector de Fugas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'dashboard.score' %}active{% endif %}"
+                        href="{{ url_for('dashboard.score') }}">
+                        <i class="fa-solid fa-scale-balanced me-2 text-center" style="width: 20px;"></i> Análisis
+                        Crediticio
+                    </a>
+                </li>
+            </ul>
+
+            <p class="text-uppercase fw-bold px-4 mb-2 mt-4 small" style="font-size: 0.75rem; color: var(--wi-text-muted);">Herramientas</p>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'dashboard.calculadora' %}active{% endif %}"
+                        href="{{ url_for('dashboard.calculadora') }}">
+                        <i class="fa-solid fa-calculator me-2 text-center" style="width: 20px;"></i> Calculadora
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'dashboard.perfil' %}active{% endif %}"
+                        href="{{ url_for('dashboard.perfil') }}">
+                        <i class="fa-solid fa-user-gear me-2 text-center" style="width: 20px;"></i> Mi Perfil
+                    </a>
+                </li>
+            </ul>
+
+            <p class="text-uppercase fw-bold px-4 mb-2 mt-4 small" style="font-size: 0.75rem; color: var(--wi-text-muted);">Aprender</p>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.academy') }}">
+                        <i class="fa-solid fa-graduation-cap me-2 text-center" style="width: 20px;"></i> Academia Widata
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="dashboard-content">
+        <div class="container-fluid">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-dismissible fade show rounded-4 shadow-sm" role="alert"
+                style="background: var(--wi-bg-card); border: 1px solid var(--wi-border); color: var(--wi-text);">
+                <i class="fa-solid fa-circle-info me-2" style="color: var(--wi-purple-light);"></i>
+                {{ message }}
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% block dashboard_content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" title="Cambiar modo">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+    </button>
+
+    <!-- Chatbot Button -->
+    <button class="chatbot-btn" id="chatbotToggle" title="Asistente Widata">
+        <i class="fa-solid fa-comment-dots"></i>
+    </button>
+
+    <!-- Chatbot Window -->
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-robot"></i>
+                <h6>Asistente Widata</h6>
+            </div>
+            <button class="chatbot-close" id="chatbotClose"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="chatbot-messages" id="chatMessages">
+            <div class="chat-msg bot">¡Hola {{ current_user.nombre }}! 👋 ¿En qué puedo ayudarte?</div>
+        </div>
+        <div class="chatbot-quick-btns" id="quickBtns">
+            <button class="quick-btn" data-q="score">Mi score</button>
+            <button class="quick-btn" data-q="deudas">Estrategias deudas</button>
+            <button class="quick-btn" data-q="fugas">Fugas de dinero</button>
+            <button class="quick-btn" data-q="como-empezar">¿Cómo empezar?</button>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." autocomplete="off">
+            <button id="chatSend"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Theme
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const saved = localStorage.getItem('widata-theme') || 'dark';
+        html.setAttribute('data-theme', saved);
+        themeIcon.className = saved === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        themeToggle.addEventListener('click', () => {
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('widata-theme', next);
+            themeIcon.className = next === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        });
+
+        // Chatbot
+        const faq = {
+            'score': 'Tu <strong>Score Crediticio</strong> se calcula según la utilización de tus créditos. Va de 400 a 850 puntos. Revísalo en <em>Análisis Crediticio</em>. 📈',
+            'deudas': 'En <strong>Estrategias de Pago</strong> puedes usar <em>Bola de Nieve</em> o <em>Avalancha</em> para eliminar tus deudas de forma inteligente. 💪',
+            'fugas': 'El <strong>Detector de Fugas</strong> clasifica tus gastos en Hormiga, Fijo y Variable para que identifiques dónde se va tu dinero. 🔍',
+            'como-empezar': '1) Registra tus créditos, 2) Registra gastos diarios, 3) Revisa tu score y estrategias. ¡Así de fácil! 🚀',
+            'que-es': 'Widata es tu asistente de educación financiera con IA para tomar el control de tu dinero. 📊',
+            'gratis': '¡Sí! Widata es 100% gratis. 🎉',
+            'seguridad': 'Usamos encriptación y conexiones seguras. Tus datos están protegidos. 🔒'
+        };
+        document.getElementById('chatbotToggle').addEventListener('click', () => document.getElementById('chatbotWindow').classList.toggle('active'));
+        document.getElementById('chatbotClose').addEventListener('click', () => document.getElementById('chatbotWindow').classList.remove('active'));
+        document.getElementById('quickBtns').addEventListener('click', (e) => {
+            const btn = e.target.closest('.quick-btn');
+            if (!btn) return;
+            addMsg(btn.textContent, 'user');
+            setTimeout(() => addMsg(faq[btn.dataset.q] || 'No tengo esa info. 🤔', 'bot'), 500);
+        });
+        document.getElementById('chatSend').addEventListener('click', sendMsg);
+        document.getElementById('chatInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMsg(); });
+        function sendMsg() {
+            const inp = document.getElementById('chatInput');
+            const t = inp.value.trim(); if (!t) return;
+            addMsg(t, 'user'); inp.value = '';
+            setTimeout(() => {
+                const l = t.toLowerCase();
+                let r = 'No entendí tu pregunta. Intenta con: deudas, score, gastos. 🤔';
+                if (l.match(/score|puntaje|credit/)) r = faq.score;
+                else if (l.match(/deuda|pagar|estrategia/)) r = faq.deudas;
+                else if (l.match(/fuga|gasto|hormiga/)) r = faq.fugas;
+                else if (l.match(/empezar|comenzar|cómo|como/)) r = faq['como-empezar'];
+                else if (l.match(/qué es|que es|widata/)) r = faq['que-es'];
+                else if (l.match(/gratis|costo|precio/)) r = faq.gratis;
+                else if (l.match(/segur|dato|privac/)) r = faq.seguridad;
+                else if (l.match(/hola|buenas|hey/)) r = '¡Hola! 😊 ¿En qué te ayudo?';
+                else if (l.match(/gracias|thanks/)) r = '¡De nada! 💜';
+                addMsg(r, 'bot');
+            }, 600);
+        }
+        function addMsg(h, t) {
+            const d = document.createElement('div');
+            d.className = `chat-msg ${t}`; d.innerHTML = h;
+            const m = document.getElementById('chatMessages');
+            m.appendChild(d); m.scrollTop = m.scrollHeight;
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

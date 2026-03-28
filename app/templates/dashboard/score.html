@@ -1,0 +1,161 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Score Crediticio - Widata{% endblock %}
+{% block dashboard_content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 mb-1 text-gray-800 fw-bold">Score Crediticio (Simulador Widata)</h1>
+        <p class="text-muted mb-0">Basado en tu Índice de Utilización global de créditos registrados.</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8 mb-4">
+        <div class="w-card shadow-lg border-0 bg-white">
+            <div class="card-body p-0">
+                <div class="row g-0">
+                    <!-- Gauge visual / Score -->
+                    <div class="col-md-6 border-end" id="scoreVisualContainer">
+                        <div class="p-5 text-center d-flex flex-column justify-content-center h-100">
+                            <h6 class="text-uppercase text-muted fw-bold mb-3 ls-1">Score Widata</h6>
+
+                            <div class="position-relative d-inline-block mx-auto mb-3"
+                                style="width: 200px; height: 100px; overflow: hidden;">
+                                <div id="scoreGauge"
+                                    style="width: 200px; height: 200px; border-radius: 50%; border: 30px solid #e9ecef; border-bottom-color: transparent; border-right-color: transparent; transform: rotate(45deg); transition: all 1s ease;">
+                                </div>
+                                <div class="position-absolute bottom-0 w-100 text-center pb-2">
+                                    <h1 class="display-3 fw-bold mb-0" id="scoreValue">---</h1>
+                                </div>
+                            </div>
+
+                            <div id="scoreLabel" class="badge text-bg-light fs-5 px-4 py-2 mt-2 rounded-pill shadow-sm">
+                                Calculando...</div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics data -->
+                    <div class="col-md-6" id="scoreDataContainer">
+                        <div class="p-5 h-100 d-flex flex-column justify-content-center bg-light">
+                            <h5 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-chart-pie me-2 text-widata"></i>
+                                Índice de Utilización</h5>
+
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="text-muted fw-bold small">Uso vs Límite</span>
+                                    <span class="fw-bold text-dark" id="utilPriceData">$0.00 / $0.00</span>
+                                </div>
+                                <div class="progress" style="height: 12px; border-radius: 6px;">
+                                    <div id="utilProgressBar"
+                                        class="progress-bar progress-bar-striped progress-bar-animated bg-secondary"
+                                        role="progressbar" style="width: 0%"></div>
+                                </div>
+                                <div class="text-end mt-1"><span class="fw-bold fs-5" id="utilPercentVal">0%</span>
+                                </div>
+                            </div>
+
+                            <div class="alert bg-white border shadow-sm">
+                                <h6 class="fw-bold text-dark mb-2"><i
+                                        class="fa-solid fa-stethoscope text-widata me-1"></i> Diagnóstico Ejecutivo</h6>
+                                <p class="mb-0 small text-muted" id="diagText">Espere mientras el algoritmo recopila los
+                                    datos financieros...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+        const btnScoreValue = document.getElementById('scoreValue');
+        const scoreLabel = document.getElementById('scoreLabel');
+        const scoreGauge = document.getElementById('scoreGauge');
+        const utilPriceData = document.getElementById('utilPriceData');
+        const utilProgressBar = document.getElementById('utilProgressBar');
+        const utilPercentVal = document.getElementById('utilPercentVal');
+        const diagText = document.getElementById('diagText');
+
+        fetch('/api/score', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Unauthorized or server error");
+                return res.json();
+            })
+            .then(data => {
+                const score = data.score;
+                const util = data.utilization; // Percentage 0 - 100+
+                const limit = data.total_limit;
+                const used = data.total_used;
+
+                if (limit === 0) {
+                    btnScoreValue.innerText = "N/A";
+                    scoreLabel.innerText = "Sin Créditos";
+                    diagText.innerHTML = "No tienes créditos registrados en la plataforma. Registra uno en el Motor de Estrategias para activar este módulo.";
+                    return;
+                }
+
+                // Animate Score Value
+                btnScoreValue.innerText = score;
+
+                // Gauge Rotation Logic (400 = 45deg (0%), 850 = 225deg (100%)) 
+                // the gauge is rotated 45 deg base, 225 deg is full bar?
+                // Actually CSS border tricks are complex. Let's use simple colors and text.
+                let color, label, msg;
+
+                if (score >= 750) {
+                    color = '#198754'; // success
+                    label = 'Excelente';
+                    msg = `Tú nivel de utilización es ideal (${util}%). Tu calificación en Buró seguramente está blindada. Sigue pagando puntualmente.`;
+                } else if (score >= 650) {
+                    color = '#ffc107'; // warning
+                    label = 'Regular';
+                    msg = `Tu nivel de utilización (${util}%) es un poco alto. Los algoritmos bancarios recomiendan mantenerlo debajo del 30% para subir tu score real a Excelente.`;
+                    scoreGauge.style.borderBottomColor = 'transparent';
+                } else {
+                    color = '#dc3545'; // danger
+                    label = 'Peligro';
+                    msg = `¡Alerta crítica! Estás consumiendo gran parte de tu línea de crédito (${util}%). Esto desploma tu Score en la vida real. Usa el Método Avalancha urgentemente.`;
+                }
+
+                scoreLabel.innerText = label;
+                scoreLabel.style.backgroundColor = color;
+                scoreLabel.style.color = score >= 650 && score < 750 ? '#000' : '#fff';
+                scoreGauge.style.borderColor = `${color} ${color} transparent transparent`;
+
+                // Si el score es muy bajo, giramos el gauge
+                const pct = (score - 400) / (850 - 400); // 0 to 1
+                const rot = 45 + (180 * pct); // border trick rotation
+                scoreGauge.style.transform = `rotate(${rot}deg)`;
+
+                // Format Currency
+                const formater = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+                utilPriceData.innerText = `${formater.format(used)} / ${formater.format(limit)}`;
+
+                // Progress Bar
+                let clampedUtil = Math.min(util, 100);
+                utilProgressBar.style.width = `${clampedUtil}%`;
+                utilProgressBar.style.backgroundColor = color; // override bootstrap primary
+                utilProgressBar.classList.remove('bg-secondary');
+
+                utilPercentVal.innerText = `${util}%`;
+                utilPercentVal.style.color = color;
+
+                diagText.innerHTML = msg;
+            })
+            .catch(err => {
+                console.error('Error fetching score API', err);
+                diagText.innerHTML = "Ha ocurrido un error al cargar los datos del algoritmo. Intente recargar.";
+            });
+    });
+</script>
+{% endblock %}

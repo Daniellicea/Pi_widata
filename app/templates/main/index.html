@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="animated-bg">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <!-- Hero -->
+    <section class="hero-section text-center position-relative">
+        <div class="container" data-aos="fade-up">
+            <span
+                class="badge bg-secondary bg-opacity-25 text-widata-secondary rounded-pill px-3 py-2 mb-4 border border-info border-opacity-25">NUEVO:
+                Llevamos tu crédito al siguiente nivel <i class="fa-solid fa-arrow-trend-up ms-1"></i></span>
+            <h1 class="display-3 fw-bold text-white mb-4">
+                El futuro de tu dinero <br />está en <span class="text-gradient">Widata.</span>
+            </h1>
+            <p class="lead text-muted mb-5 col-md-8 mx-auto fs-4">
+                Deja de adivinar. Nuestra inteligencia artificial analiza tu patrón de gasto y te proporciona la
+                estrategia exacta para fulminar tus deudas.
+            </p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-widata btn-lg">
+                    Empezar gratis
+                </a>
+                <a href="#features" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                    Descubrir cómo
+                </a>
+            </div>
+
+            <!-- Dashboard Preview Image Concept (Using glass effect) -->
+            <div class="mt-5 pt-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="position-relative mx-auto rounded-4 p-2 shadow-lg"
+                    style="max-width: 800px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
+                        alt="Dashboard Preview" class="img-fluid rounded-3 opacity-75"
+                        style="filter: hue-rotate(220deg) brightness(0.8) contrast(1.2);">
+                    <div class="position-absolute top-50 start-50 translate-middle w-100 text-center px-3">
+                        <div class="w-card d-inline-block p-4">
+                            <h3 class="fw-bold m-0"><i class="fa-solid fa-bolt text-gradient me-2"></i>Score +55 Puntos
+                            </h3>
+                            <p class="text-muted m-0 mt-2">Usuario Promedio - 1er Mes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Stats -->
+<section class="py-5 border-top border-bottom border-secondary border-opacity-25 bg-black bg-opacity-25" id="stats">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <h2 class="display-4 fw-bold text-gradient mb-0">+5,000</h2>
+                <p class="text-muted mt-2">Usuarios Analizados</p>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="display-4 fw-bold text-gradient mb-0">$2.1M</h2>
+                <p class="text-muted mt-2">Deuda Optimizada</p>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <h2 class="display-4 fw-bold text-gradient mb-0">30%</h2>
+                <p class="text-muted mt-2">Ahorro Promedio Tasa</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="py-5 my-5" id="features">
+    <div class="container">
+        <div class="text-center mb-5 pb-3" data-aos="fade-up">
+            <h2 class="display-5 fw-bold text-white">Domina tu Score</h2>
+            <p class="text-muted lead">Herramientas financieras avanzadas, explicadas para mortales.</p>
+        </div>
+
+        <div class="row g-4 position-relative">
+            <!-- Estrategias de Pago -->
+            <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="100">
+                <div class="w-card p-4 h-100 position-relative overflow-hidden">
+                    <span class="feature-number">1</span>
+                    <div class="icon-box">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">La Avalancha</h5>
+                    <p class="text-muted small">Algoritmo que destila tus meses sin intereses y tasas altas para
+                        indicarte qué producto liquidar primero con exactitud quirúrgica.</p>
+                </div>
+            </div>
+
+            <!-- Detector de Fugas -->
+            <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="200">
+                <div class="w-card p-4 h-100 position-relative overflow-hidden">
+                    <span class="feature-number">2</span>
+                    <div class="icon-box">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Escaneo de Fugas</h5>
+                    <p class="text-muted small">Localiza los infames "gastos hormiga" que el cerebro ignora pero tu
+                        cartera reciente. Convierte gastos variables en activos.</p>
+                </div>
+            </div>
+
+            <!-- Análisis Crediticio -->
+            <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="300">
+                <div class="w-card p-4 h-100 position-relative overflow-hidden">
+                    <span class="feature-number">3</span>
+                    <div class="icon-box">
+                        <i class="fa-solid fa-fingerprint"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Bypass al Buró</h5>
+                    <p class="text-muted small">Descifra la matriz del índice de utilización de crédito de tus cuentas.
+                        Mantén tu uso bajo el 30% con nuestras alertas preventivas.</p>
+                </div>
+            </div>
+
+            <!-- Academia Interactiva -->
+            <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="400">
+                <div class="w-card p-4 h-100 position-relative overflow-hidden">
+                    <span class="feature-number">4</span>
+                    <div class="icon-box">
+                        <i class="fa-solid fa-vr-cardboard"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Widata Academy</h5>
+                    <p class="text-muted small">Desde nivel "principiante" hasta un maestro del interés compuesto en
+                        módulos cortos, diseñados para no aburrir a nadie.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial Section -->
+<section class="py-5 bg-black bg-opacity-50">
+    <div class="container py-5" data-aos="fade-up">
+        <div class="row align-items-center">
+            <div class="col-lg-5 mb-5 mb-lg-0">
+                <h2 class="display-5 fw-bold text-white mb-4">Lo que nuestros usuarios están logrando</h2>
+                <p class="lead text-muted mb-4">No confíes en lo que decimos nosotros, confía en los números y en la
+                    gente real.</p>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light rounded-pill px-4">Ver caso de
+                    estudio</a>
+            </div>
+            <div class="col-lg-6 offset-lg-1">
+                <div class="w-card p-5 position-relative">
+                    <i
+                        class="fa-solid fa-quote-left fs-1 text-gradient position-absolute top-0 start-0 m-4 opacity-50"></i>
+                    <p class="fs-4 fst-italic position-relative z-1 mb-4 mt-3">"Solía tener terror a revisar mis
+                        tarjetas cada quincena. Widata no solo organizó mis pagos con su estrategia de avalancha, sino
+                        que mejoró mi score en Buró 60 puntos en solo 4 meses. Ahora tengo control."</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-secondary bg-opacity-25"
+                                style="width: 50px; height: 50px; background-image: url('https://i.pravatar.cc/150?img=68'); background-size: cover;">
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">Carlos M.</h6>
+                                <small class="text-widata-secondary">Analista de Datos</small>
+                            </div>
+                        </div>
+                        <div class="text-warning">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5 text-center my-5 position-relative">
+    <div class="bg-shape shape-2"
+        style="background: rgba(139, 92, 246, 0.2); width: 600px; height: 600px; left: 50%; top: 50%; transform: translate(-50%, -50%); animation: none;">
+    </div>
+    <div class="container py-5 position-relative z-1" data-aos="zoom-in">
+        <div class="w-card p-5 mx-auto" style="max-width: 800px; border: 1px solid rgba(6, 182, 212, 0.3);">
+            <h2 class="display-5 fw-bold mb-4 text-white">Tu futuro millonario empieza hoy</h2>
+            <p class="lead text-muted mb-5">
+                Únete a la nueva era y recibe análisis algorítmico inmediato de tu estatus. No tarjetas, no comisiones
+                ocultas.
+            </p>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-widata btn-lg px-5 shadow-lg fs-4">
+                Crear Mi Cuenta Gratis <i class="fa-solid fa-arrow-right ms-2 mt-1"></i>
+            </a>
+            <p class="mt-4 small text-muted"><i class="fa-solid fa-lock text-widata-secondary me-1"></i> Tus datos están
+                encriptados a nivel bancario AES-256.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

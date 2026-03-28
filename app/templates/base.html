@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Widata - Educación Financiera{% endblock %}</title>
+    <meta name="description" content="Widata: Plataforma de educación financiera con IA. Analiza tu patrón de gasto y elimina tus deudas.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url_for('main.index') }}">
+                <i class="fa-solid fa-bolt text-gradient me-2 fs-3"></i> Widata
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.index') }}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.academy') }}">Academia</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard.index') }}">Mi Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color: var(--wi-rose) !important;" href="{{ url_for('auth.logout') }}">Salir</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">Ingresar</a>
+                    </li>
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a class="btn btn-widata rounded-pill px-4 shadow-sm"
+                            href="{{ url_for('auth.register') }}">Unirse</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="min-vh-100" style="padding-top: 90px;">
+        <div class="container mt-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-dismissible fade show border-0 rounded-4 shadow"
+                style="background: var(--wi-bg-card); border: 1px solid var(--wi-border) !important; color: var(--wi-text);" role="alert">
+                <i class="fa-solid fa-circle-info me-2" style="color: var(--wi-purple-light);"></i>
+                {{ message }}
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="pt-5 mt-5" style="border-top: 1px solid var(--wi-border-light); background: var(--wi-bg-secondary);"
+        data-aos="fade-up">
+        <div class="container text-center py-4">
+            <h4 class="fw-bold mb-3"><i class="fa-solid fa-chart-simple text-gradient me-2"></i> Widata</h4>
+            <p class="mb-4 col-md-8 mx-auto text-muted">
+                Widata es una plataforma fintech de educación financiera digital. Creemos que la información es poder, y
+                nuestra misión es empoderar a miles de personas para tomar el control de su dinero usando algoritmos.
+            </p>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light rounded-pill px-5 my-2">
+                Comenzar mi diagnóstico
+            </a>
+            <hr class="opacity-10 my-4">
+            <p class="mb-0 small text-muted">&copy; 2026 Widata. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" title="Cambiar modo día/noche">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+    </button>
+
+    <!-- Chatbot Button -->
+    <button class="chatbot-btn" id="chatbotToggle" title="Asistente Widata">
+        <i class="fa-solid fa-comment-dots"></i>
+    </button>
+
+    <!-- Chatbot Window -->
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-robot"></i>
+                <h6>Asistente Widata</h6>
+            </div>
+            <button class="chatbot-close" id="chatbotClose"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="chatbot-messages" id="chatMessages">
+            <div class="chat-msg bot">
+                ¡Hola! 👋 Soy el asistente virtual de <strong>Widata</strong>. ¿En qué puedo ayudarte hoy?
+            </div>
+        </div>
+        <div class="chatbot-quick-btns" id="quickBtns">
+            <button class="quick-btn" data-q="que-es">¿Qué es Widata?</button>
+            <button class="quick-btn" data-q="gratis">¿Es gratis?</button>
+            <button class="quick-btn" data-q="score">¿Qué es el score?</button>
+            <button class="quick-btn" data-q="deudas">Ayuda con deudas</button>
+            <button class="quick-btn" data-q="seguridad">¿Es seguro?</button>
+            <button class="quick-btn" data-q="contacto">Contacto</button>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." autocomplete="off">
+            <button id="chatSend"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 50 });
+
+        // ─── Theme Toggle ──────────────────────────────────
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('widata-theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('widata-theme', next);
+            updateIcon(next);
+        });
+
+        function updateIcon(theme) {
+            themeIcon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+
+        // ─── Chatbot ──────────────────────────────────
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const chatbotClose = document.getElementById('chatbotClose');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        const chatMessages = document.getElementById('chatMessages');
+        const quickBtns = document.getElementById('quickBtns');
+
+        const faqResponses = {
+            'que-es': 'Widata es una <strong>plataforma fintech de educación financiera</strong> que usa inteligencia artificial para analizar tu patrón de gastos y ayudarte a crear estrategias para eliminar tus deudas. 📊',
+            'gratis': '¡Sí! Widata es <strong>completamente gratuita</strong>. Solo crea tu cuenta y comienza tu diagnóstico financiero. No hay costos ocultos. 🎉',
+            'score': 'El <strong>Score Crediticio Widata</strong> es un indicador que analiza tu utilización de crédito. Va de 400 a 850 puntos. Mientras menos porcentaje de tu límite uses, mejor será tu score. 📈',
+            'deudas': 'Widata te ofrece el módulo <strong>"Estrategias de Pago"</strong> donde puedes elegir entre el método <em>Bola de Nieve</em> (pagar deudas de menor a mayor) o <em>Avalancha</em> (pagar primero las de mayor interés). ¡Registra tus créditos y te guiamos! 💪',
+            'seguridad': 'Tu información está <strong>100% segura</strong>. Usamos encriptación de contraseñas con bcrypt, conexión segura a la base de datos y autenticación por sesión. Nunca compartimos tus datos. 🔒',
+            'contacto': 'Puedes contactarnos en <strong>soporte@widata.mx</strong> o visitando nuestra sección de <strong>Academia</strong> donde encontrarás recursos educativos financieros. 📧',
+            'fugas': 'El <strong>Detector de Fugas</strong> categoriza tus gastos en: <em>Hormiga</em> (pequeños diarios como cafés), <em>Fijo</em> (renta, servicios) y <em>Variable</em> (entretenimiento). ¡Así identificas dónde se va tu dinero! 🔍',
+            'como-empezar': 'Es muy fácil: <strong>1)</strong> Crea tu cuenta gratis, <strong>2)</strong> Registra tus créditos/deudas, <strong>3)</strong> Registra tus gastos diarios, <strong>4)</strong> ¡Deja que Widata analice y te dé estrategias! 🚀'
+        };
+
+        chatbotToggle.addEventListener('click', () => {
+            chatbotWindow.classList.toggle('active');
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotWindow.classList.remove('active');
+        });
+
+        // Quick buttons
+        quickBtns.addEventListener('click', (e) => {
+            const btn = e.target.closest('.quick-btn');
+            if (!btn) return;
+            const q = btn.dataset.q;
+            addMessage(btn.textContent, 'user');
+            setTimeout(() => {
+                addMessage(faqResponses[q] || 'Lo siento, no tengo esa información. ¿Puedo ayudarte con otra cosa?', 'bot');
+            }, 600);
+        });
+
+        // Send message
+        chatSend.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            addMessage(text, 'user');
+            chatInput.value = '';
+
+            setTimeout(() => {
+                const response = findAnswer(text);
+                addMessage(response, 'bot');
+            }, 700);
+        }
+
+        function findAnswer(text) {
+            const lower = text.toLowerCase();
+            if (lower.includes('qué es') || lower.includes('que es') || lower.includes('widata')) return faqResponses['que-es'];
+            if (lower.includes('gratis') || lower.includes('costo') || lower.includes('precio')) return faqResponses['gratis'];
+            if (lower.includes('score') || lower.includes('puntaje') || lower.includes('crediticio')) return faqResponses['score'];
+            if (lower.includes('deuda') || lower.includes('pagar') || lower.includes('estrategia')) return faqResponses['deudas'];
+            if (lower.includes('segur') || lower.includes('datos') || lower.includes('privacidad')) return faqResponses['seguridad'];
+            if (lower.includes('contacto') || lower.includes('correo') || lower.includes('email')) return faqResponses['contacto'];
+            if (lower.includes('fuga') || lower.includes('gasto') || lower.includes('hormiga')) return faqResponses['fugas'];
+            if (lower.includes('empezar') || lower.includes('comenzar') || lower.includes('registr') || lower.includes('cómo')) return faqResponses['como-empezar'];
+            if (lower.includes('hola') || lower.includes('buenas') || lower.includes('hey')) return '¡Hola! 😊 ¿En qué puedo ayudarte? Pregúntame sobre Widata, deudas, score crediticio o gastos.';
+            if (lower.includes('gracias') || lower.includes('thanks')) return '¡De nada! 😄 Si necesitas algo más, aquí estaré. ¡Éxito con tus finanzas! 💜';
+            return 'No estoy seguro de entender esa pregunta. 🤔 Intenta preguntar sobre: <em>deudas, score crediticio, gastos, seguridad</em> o usa los botones rápidos arriba.';
+        }
+
+        function addMessage(html, type) {
+            const div = document.createElement('div');
+            div.className = `chat-msg ${type}`;
+            div.innerHTML = html;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,215 @@
+{% extends "dashboard_base.html" %}
+{% block dashboard_content %}
+
+<!-- Welcome & Quick Stats -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4 mt-2">
+    <div>
+        <h3 class="fw-bold mb-1">¡Hola, {{ current_user.nombre }}! 👋</h3>
+        <p class="text-muted mb-0">Aquí está tu resumen financiero.</p>
+    </div>
+    <a href="{{ url_for('dashboard.calculadora') }}" class="btn btn-widata rounded-pill px-4 shadow mt-2 mt-sm-0">
+        <i class="fa-solid fa-calculator me-1"></i> Calculadora
+    </a>
+</div>
+
+<!-- Stats Cards Row -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-xl-3">
+        <div class="stat-box">
+            <div class="stat-number" data-count="{{ total_deuda|int }}">$0</div>
+            <small class="text-muted fw-medium">Deuda Total</small>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="stat-box">
+            <div class="stat-number" data-count="{{ total_gastos|int }}">$0</div>
+            <small class="text-muted fw-medium">Gastos Registrados</small>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="stat-box">
+            <div class="stat-number" data-count="{{ num_creditos }}">0</div>
+            <small class="text-muted fw-medium">Créditos Activos</small>
+        </div>
+    </div>
+    <div class="col-6 col-xl-3">
+        <div class="stat-box">
+            <div class="stat-number" style="{% if utilizacion < 30 %}color: var(--wi-green){% elif utilizacion < 50 %}color: orange{% else %}color: var(--wi-rose){% endif %}">{{ "%.0f"|format(utilizacion) }}%</div>
+            <small class="text-muted fw-medium">Utilización Crédito</small>
+        </div>
+    </div>
+</div>
+
+<!-- Financial Tips Carousel -->
+<div class="w-card mb-4 p-3" style="border-left: 4px solid var(--wi-purple);">
+    <div class="d-flex align-items-center">
+        <div class="me-3" style="font-size: 28px;">💡</div>
+        <div class="flex-grow-1" id="tipCarousel">
+            <small class="text-muted fw-bold text-uppercase">Tip del día</small>
+            <p class="mb-0 fw-medium" id="tipText">Cargando tip...</p>
+        </div>
+        <button class="btn btn-sm rounded-pill" onclick="nextTip()" style="border: 1px solid var(--wi-border); color: var(--wi-text-muted);">
+            <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Health Indicator -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-4">
+        <div class="w-card text-center h-100">
+            <h6 class="fw-bold mb-3"><i class="fa-solid fa-heartbeat me-1" style="color: var(--wi-purple-light);"></i> Salud Financiera</h6>
+            <div class="position-relative d-inline-block mb-3">
+                <svg width="140" height="140" viewBox="0 0 140 140">
+                    <circle cx="70" cy="70" r="60" fill="none" stroke="var(--wi-border-light)" stroke-width="10"/>
+                    <circle cx="70" cy="70" r="60" fill="none" 
+                        stroke="{% if utilizacion < 30 %}var(--wi-green){% elif utilizacion < 50 %}orange{% else %}var(--wi-rose){% endif %}" 
+                        stroke-width="10" stroke-linecap="round"
+                        stroke-dasharray="{{ (100 - utilizacion) * 3.77 }} 377"
+                        transform="rotate(-90 70 70)"
+                        style="transition: stroke-dasharray 1.5s ease;"/>
+                </svg>
+                <div class="position-absolute top-50 start-50 translate-middle text-center">
+                    <span class="fw-bold" style="font-size: 1.5rem; color: var(--wi-text);">
+                        {% if utilizacion < 30 %}A+{% elif utilizacion < 50 %}B{% elif utilizacion < 70 %}C{% else %}D{% endif %}
+                    </span>
+                </div>
+            </div>
+            <p class="text-muted small mb-0">
+                {% if utilizacion < 30 %}¡Excelente! Tu utilización es óptima.
+                {% elif utilizacion < 50 %}Bien, pero intenta bajar tu deuda.
+                {% elif utilizacion < 70 %}Atención: estás usando mucho crédito.
+                {% else %}Alerta: tu utilización es muy alta.{% endif %}
+            </p>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="w-card h-100">
+            <h6 class="fw-bold mb-3"><i class="fa-solid fa-mug-hot me-2" style="color: var(--wi-rose);"></i> Fugas Hormiga</h6>
+            <div class="text-center py-3">
+                <span class="fw-bold" style="font-size: 2.5rem; color: var(--wi-rose);">${{ "{:,.0f}".format(fuga_hormiga) }}</span>
+                <p class="text-muted small mt-2 mb-0">Pequeños gastos que suman mucho. Revisa tu <a href="{{ url_for('dashboard.fugas') }}" style="color: var(--wi-purple-light);">Detector de Fugas</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="w-card h-100">
+            <h6 class="fw-bold mb-3"><i class="fa-solid fa-rocket me-2" style="color: var(--wi-purple-light);"></i> Acciones Rápidas</h6>
+            <div class="d-grid gap-2">
+                <a href="{{ url_for('dashboard.estrategia') }}" class="btn btn-outline-light rounded-pill btn-sm text-start">
+                    <i class="fa-solid fa-plus me-2" style="color: var(--wi-purple-light);"></i> Registrar crédito
+                </a>
+                <a href="{{ url_for('dashboard.fugas') }}" class="btn btn-outline-light rounded-pill btn-sm text-start">
+                    <i class="fa-solid fa-receipt me-2" style="color: var(--wi-rose);"></i> Registrar gasto
+                </a>
+                <a href="{{ url_for('dashboard.score') }}" class="btn btn-outline-light rounded-pill btn-sm text-start">
+                    <i class="fa-solid fa-chart-line me-2" style="color: var(--wi-green);"></i> Ver mi score
+                </a>
+                <a href="{{ url_for('dashboard.calculadora') }}" class="btn btn-outline-light rounded-pill btn-sm text-start">
+                    <i class="fa-solid fa-calculator me-2" style="color: var(--wi-cyan);"></i> Simulador financiero
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Top Créditos (Avalancha preview) -->
+    <div class="col-lg-6 mb-4">
+        <div class="w-card shadow-sm h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="m-0 fw-bold"><i class="fa-solid fa-bullseye me-2" style="color: var(--wi-purple-light);"></i> Próximos a liquidar</h6>
+                <a href="{{ url_for('dashboard.estrategia') }}" class="btn btn-sm btn-widata rounded-pill shadow-sm px-3"><i class="fa-solid fa-plus me-1"></i> Agregar</a>
+            </div>
+            {% if creditos %}
+            <div class="table-responsive">
+                <table class="table table-borderless" style="color: var(--wi-text);">
+                    <thead class="small" style="color: var(--wi-text-muted); border-bottom: 1px solid var(--wi-border-light);">
+                        <tr><th>Institución</th><th>Deuda</th><th>Tasa</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for c in creditos[:3] %}
+                        <tr style="border-bottom: 1px solid var(--wi-border-light);">
+                            <td class="fw-medium">{{ c.institucion.nombre }}</td>
+                            <td class="fw-bold">${{ "{:,.2f}".format(c.deuda_actual) }}</td>
+                            <td class="fw-bold" style="color: var(--wi-rose);">{{ c.tasa_anual }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted text-center py-4">Aún no hay créditos registrados.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Fugas recientes -->
+    <div class="col-lg-6 mb-4">
+        <div class="w-card shadow-sm h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="m-0 fw-bold"><i class="fa-solid fa-money-bill-wave me-2" style="color: var(--wi-rose);"></i> Gastos Recientes</h6>
+                <a href="{{ url_for('dashboard.fugas') }}" class="btn btn-sm btn-outline-light rounded-pill px-3"><i class="fa-solid fa-plus me-1"></i> Agregar</a>
+            </div>
+            {% if gastos %}
+            <div class="d-flex flex-column gap-2">
+                {% for g in gastos[:4] %}
+                <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom: 1px solid var(--wi-border-light);">
+                    <div>
+                        <span class="fw-medium d-block" style="color: var(--wi-text);">{{ g.descripcion }}</span>
+                        <span class="badge rounded-pill {% if g.categoria.nombre == 'Hormiga' %}text-bg-danger{% else %}text-bg-secondary{% endif %}" style="font-size: 0.7rem;">{{ g.categoria.nombre }}</span>
+                        <small class="text-muted ms-1">{{ g.fecha.strftime('%d/%m/%Y') }}</small>
+                    </div>
+                    <span class="fw-bold" style="color: var(--wi-rose);">-${{ "{:,.2f}".format(g.monto) }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted text-center py-4">No hay gastos registrados.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// ─── Animated Counters ──────────────────────────────────
+document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    const isMoney = el.textContent.includes('$');
+    let current = 0;
+    const step = Math.ceil(target / 60);
+    const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = isMoney ? '$' + current.toLocaleString() : current.toLocaleString();
+    }, 25);
+});
+
+// ─── Financial Tips ─────────────────────────────────────
+const tips = [
+    "Paga más que el mínimo en tus tarjetas. El pago mínimo solo cubre intereses, no reduces tu deuda real.",
+    "Usa la regla 50/30/20: 50% necesidades, 30% deseos, 20% ahorro y pago de deudas.",
+    "Un café de $60 diario son $21,900 al año. Pequeñas fugas suman grandes cantidades.",
+    "Antes de una compra grande, espera 48 horas. Si aún la quieres después, adelante.",
+    "Automatiza tus ahorros. Lo que no ves, no lo gastas.",
+    "El método Avalancha ahorra más en intereses; el método Bola de Nieve da motivación rápida.",
+    "Mantén tu utilización de crédito por debajo del 30% para un buen score crediticio.",
+    "Un fondo de emergencias de 3-6 meses de gastos te protege de imprevistos.",
+    "Revisa tus suscripciones mensuales. Podrías estar pagando servicios que no usas.",
+    "Invertir desde joven, aunque sea poco, aprovecha el interés compuesto a tu favor."
+];
+let tipIdx = Math.floor(Math.random() * tips.length);
+document.getElementById('tipText').textContent = tips[tipIdx];
+function nextTip() {
+    tipIdx = (tipIdx + 1) % tips.length;
+    const el = document.getElementById('tipText');
+    el.style.opacity = 0;
+    setTimeout(() => { el.textContent = tips[tipIdx]; el.style.opacity = 1; }, 300);
+}
+setInterval(nextTip, 12000);
+</script>
+{% endblock %}

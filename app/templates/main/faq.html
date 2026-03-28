@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Preguntas Frecuentes - FAQ - Widata{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-widata fade-in display-5">Preguntas Frecuentes</h1>
+        <p class="text-muted col-md-8 mx-auto lead">Despeja tus dudas y toma el control. Estamos aquí para ayudarte a
+            comprender el algoritmo de Widata y cómo dominar tu dinero.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="accordion accordion-flush rounded-3 shadow-sm border bg-white" id="faqAccordion">
+
+                <!-- FAQ 1 -->
+                <div class="accordion-item rounded-top-3 border-0">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button fw-bold fs-5 text-dark bg-white" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#faq1">
+                            ¿Qué es el Método Avalancha de Widata?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show border-top" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body bg-light text-muted p-4">
+                            Widata emplea un algoritmo de priorización financiera que llamamos "Método Avalancha".
+                            Analiza todos los créditos que registras, revisa sus tasas de interés y los ordena
+                            matemáticamente para que primero ataques y liquides la deuda que te está robando más dinero
+                            por intereses. Al priorizar esta deuda con tu capital extra (mientras pagas solo el mínimo
+                            de las otras), matemáticamente ahorrarás más dinero y liquidarás tus obligaciones en menos
+                            tiempo que usando otros métodos.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="accordion-item border-top border-light">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold fs-5 text-dark bg-white" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#faq2">
+                            ¿Cómo me ayuda el Detector de Fugas?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body bg-light text-muted p-4">
+                            Los gastos "Hormiga" son pequeñas compras diarias imperceptibles que, al acumularse durante
+                            meses, destruyen silenciosamente tu capacidad de ahorro. El Detector de Fugas de Widata
+                            permite registrar estos movimientos y categorizarlos. Evaluará automáticamente si tus gastos
+                            en la categoría "Hormiga" o "Variable" están poniendo en riesgo rojo tu estabilidad y te
+                            presentará el acumulado consolidado de dinero que podrías haber utilizado para invertir o
+                            pagar tus créditos.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="accordion-item border-top border-light">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold fs-5 text-dark bg-white" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#faq3">
+                            ¿Mi Score dentro de Widata es real o tiene conexión oficial con el Buró de Crédito?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body bg-light text-muted p-4">
+                            No poseemos un vínculo directo con el Buró de Crédito oficial (Trans Union / Círculo de
+                            Crédito). El Score mostrado en su Dashboard es una <strong>simulación algorítmica de
+                                Widata</strong> de muy alta precisión. Funciona calculando el Índice de Utilización
+                            global de tus créditos registrados en nuestra base de datos. Puesto que en la vida real la
+                            "Utilización" compone el 30% de tu calificación oficial en Score, la de Widata funciona como
+                            una brújula sumamente confiable. Si tu Widata Score está en nivel "Excelente", lo estará en
+                            el reporte oficial.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="accordion-item rounded-bottom-3 border-top border-light">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold fs-5 text-dark bg-white" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#faq4">
+                            ¿Por qué Widata solicita registrar mis propios datos de crédito en lugar de conectarse en
+                            automático al portal bancario?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body bg-light text-muted p-4">
+                            Seguridad ante todo. Widata está construida bajo protocolos de arquitectura hermética. Tu
+                            privacidad y la protección estricta a tu información bancaria son nuestro estándar oro. No
+                            solicitamos ni almacenaremos jamás contraseñas bancarias, NIPs ni tokens de seguridad. El
+                            modelo de negocio se basa en el registro participativo (SaaS pasivo) de los usuarios, esto
+                            te otorga 100% el control total y exclusivo sobre cada dato sensible que transita por esta
+                            plataforma.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

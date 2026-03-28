@@ -1,0 +1,137 @@
+{% extends "dashboard_base.html" %}
+{% block title %}Detector de Fugas - Widata{% endblock %}
+{% block dashboard_content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 mb-1 text-gray-800 fw-bold">Detector de Fugas</h1>
+        <p class="text-muted mb-0">Rastrea tus gastos diarios y clasifícalos para detectar patrones.</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="w-card shadow-sm border-start border-danger border-4">
+            <div class="card-body py-4">
+                <div class="row align-items-center">
+                    <div class="col-auto me-3">
+                        <div class="icon-box bg-danger bg-opacity-10 text-danger mb-0 mx-auto"
+                            style="width: 80px; height: 80px; font-size: 35px;">
+                            <i class="fa-solid fa-fire text-danger"></i>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h4 class="text-muted fw-bold mb-1 text-uppercase small">Fuga de Capital (Hormiga) Acumulada
+                        </h4>
+                        <h2 class="display-5 fw-bold text-danger mb-2">${{ "{:,.2f}".format(fuga_hormiga) }}</h2>
+                        {% if fuga_hormiga > 0 %}
+                        <p class="text-muted mb-0 fw-medium bg-light p-2 rounded d-inline-block border">⚠️ Este dinero
+                            está retrasando activamente tu libertad financiera. Alerta roja.</p>
+                        {% else %}
+                        <p class="text-success fw-medium mb-0"><i class="fa-solid fa-check-circle me-1"></i> ¡Excelente
+                            control! No tienes fugas hormiga detectadas recientemente.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Tabla de gastos -->
+    <div class="col-lg-8 mb-4">
+        <div class="w-card shadow-sm h-100">
+            <div class="card-header bg-white py-3">
+                <h6 class="m-0 fw-bold text-dark"><i class="fa-solid fa-list-check me-2 text-danger"></i> Auditoría de
+                    Gastos Recientes</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light text-muted small text-uppercase">
+                            <tr>
+                                <th class="px-4">Fecha</th>
+                                <th>Descripción</th>
+                                <th>Categoría</th>
+                                <th class="text-end px-4">Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for g in gastos %}
+                            <tr>
+                                <td class="text-muted px-4"><small>{{ g.fecha.strftime('%d-%m-%Y') }}</small></td>
+                                <td class="fw-bold">{{ g.descripcion }}</td>
+                                <td>
+                                    <span class="badge border py-2 
+                                        {% if g.categoria.nombre == 'Hormiga' %} bg-danger bg-opacity-10 text-danger border-danger
+                                        {% elif g.categoria.nombre == 'Variable' %} bg-warning bg-opacity-10 text-dark border-warning
+                                        {% else %} bg-success bg-opacity-10 text-success border-success {% endif %}">
+                                        {{ g.categoria.nombre }}
+                                    </span>
+                                </td>
+                                <td class="text-end fw-bold text-danger px-4">-${{ "{:,.2f}".format(g.monto) }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">Aún no hay registros de gastos.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario Nuevo Gasto -->
+    <div class="col-lg-4 mb-4">
+        <div class="w-card shadow-sm bg-light">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h6 class="m-0 fw-bold text-dark"><i class="fa-solid fa-receipt me-1 text-danger"></i> Registrar Gasto
+                </h6>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Descripción / Concepto</label>
+                        {{ form.descripcion(class="form-control", placeholder="Ej. Café matutino, Cines, Comida") }}
+                        {% for error in form.descripcion.errors %}<div class="text-danger small">{{ error }}</div>{%
+                        endfor %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-7 mb-3">
+                            <label class="form-label small fw-bold">Monto Exacto</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                {{ form.monto(class="form-control fw-bold text-danger", placeholder="0.00") }}
+                            </div>
+                            {% for error in form.monto.errors %}<div class="text-danger small">{{ error }}</div>{%
+                            endfor %}
+                        </div>
+
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label small fw-bold">Fecha</label>
+                            {{ form.fecha(class="form-control", type="date") }}
+                            {% for error in form.fecha.errors %}<div class="text-danger small">{{ error }}</div>{%
+                            endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold">Categorización Algorítmica</label>
+                        {{ form.categoria_id(class="form-select") }}
+                        <small class="text-muted mt-1 d-block"><i class="fa-solid fa-circle-info"></i> Elige
+                            cuidadosamente. Los gastos "Hormiga" drenarán tu calificación.</small>
+                    </div>
+
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-outline-danger btn-lg fw-bold shadow-sm") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

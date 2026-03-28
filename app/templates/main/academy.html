@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+{% block title %}Academia - Widata{% endblock %}
+{% block content %}
+<div class="row align-items-center mb-5 mt-4">
+    <div class="col-md-6 order-md-2 mb-4 mb-md-0 d-flex justify-content-center">
+        <!-- Optional Decorative Image Container -->
+        <div class="icon-box text-widata shadow-sm bg-light bg-opacity-50"
+            style="width: 250px; height: 250px; font-size: 100px;">
+            <i class="fa-solid fa-laptop-file"></i>
+        </div>
+    </div>
+    <div class="col-md-6 order-md-1">
+        <h1 class="display-4 fw-bold text-dark mb-3 fade-in">Academia Interactiva</h1>
+        <p class="lead text-muted mb-4">
+            Aprende a dominar el juego del dinero. Aquí encontrarás videoclases y un glosario para transformar tu
+            educación financiera en resultados reales.
+        </p>
+    </div>
+</div>
+
+<ul class="nav nav-pills nav-fill mb-5 shadow-sm rounded-pill p-1 bg-white border" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold active rounded-pill px-4 text-widata" id="pills-video-tab" data-bs-toggle="pill"
+            data-bs-target="#pills-video" type="button" role="tab">Videoteca Educativa</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold rounded-pill px-4" id="pills-radar-tab" data-bs-toggle="pill"
+            data-bs-target="#pills-radar" type="button" role="tab" style="color: #6A0DAD;">Radar de Mercado</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link fw-bold rounded-pill px-4" id="pills-diccionario-tab" data-bs-toggle="pill"
+            data-bs-target="#pills-diccionario" type="button" role="tab" style="color: #6A0DAD;">Diccionario
+            Financiero</button>
+    </li>
+</ul>
+
+<div class="tab-content" id="pills-tabContent">
+
+    <!-- Tab Videoteca -->
+    <div class="tab-pane fade show active" id="pills-video" role="tabpanel">
+        <h3 class="fw-bold mb-4 text-dark"><i class="fa-brands fa-youtube text-danger me-2"></i> Módulos en Video</h3>
+        <div class="row g-4">
+            <!-- Video 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="w-card overflow-hidden h-100 shadow-sm border-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube.com/embed/5U7g_V83_Fk" title="La Verdad del Buró"
+                            allowfullscreen></iframe>
+                    </div>
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold fs-5 text-dark mb-2">La Verdad del Buró</h5>
+                        <p class="text-muted small mb-0">Descubre cómo funciona el Buró de Crédito en México y rompe los
+                            mitos principales.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="w-card overflow-hidden h-100 shadow-sm border-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube.com/embed/Z05e3kQc_tQ" title="Ciencia contra Deudas"
+                            allowfullscreen></iframe>
+                    </div>
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold fs-5 text-dark mb-2">Ciencia contra Deudas</h5>
+                        <p class="text-muted small mb-0">Aplica el método Avalancha Matemática para hackear los
+                            intereses de los bancos a tu favor.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="w-card overflow-hidden h-100 shadow-sm border-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube.com/embed/U2N72B_Y-R8" title="Desmontando el CAT"
+                            allowfullscreen></iframe>
+                    </div>
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold fs-5 text-dark mb-2">Desmontando el CAT</h5>
+                        <p class="text-muted small mb-0">Por qué el Costo Anual Total es la métrica más importante, pero
+                            no la única que debes observar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Radar -->
+    <div class="tab-pane fade" id="pills-radar" role="tabpanel">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-dark m-0"><i class="fa-solid fa-satellite-dish text-widata me-2"></i> Tarjetas para
+                Construir Score</h3>
+            <span class="badge bg-danger rounded-pill px-3 py-2">Sin patrocinadores</span>
+        </div>
+        <p class="text-muted mb-4">Recomendaciones algorítmicas de Widata basadas en el valor aportado al consumidor en
+            México (no recibimos comisiones).</p>
+
+        <div class="row g-4">
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100 w-card border-top border-5 border-widata">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-dark mb-0">Nu México</h5>
+                            <span class="badge bg-light text-dark border">Fintech</span>
+                        </div>
+                        <h6 class="text-widata fw-bold small">Tarjeta de Crédito Nu</h6>
+
+                        <div class="row mt-4 g-2 text-center small">
+                            <div class="col-4 border-end">
+                                <span class="d-block text-muted">CAT PROM.</span>
+                                <span class="fw-bold text-danger">104.9%</span>
+                            </div>
+                            <div class="col-4 border-end">
+                                <span class="d-block text-muted">ANUALIDAD</span>
+                                <span class="fw-bold text-success">$0.00</span>
+                            </div>
+                            <div class="col-4">
+                                <span class="d-block text-muted">BENEFICIO</span>
+                                <span class="fw-bold text-dark">Alta Ap.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100 w-card border-top border-5 border-primary">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-dark mb-0">BBVA</h5>
+                            <span class="badge bg-light text-dark border">Banco Trad.</span>
+                        </div>
+                        <h6 class="text-primary fw-bold small">Tarjeta Azul BBVA</h6>
+
+                        <div class="row mt-4 g-2 text-center small">
+                            <div class="col-4 border-end">
+                                <span class="d-block text-muted">CAT PROM.</span>
+                                <span class="fw-bold text-danger">108.6%</span>
+                            </div>
+                            <div class="col-4 border-end">
+                                <span class="d-block text-muted">ANUALIDAD</span>
+                                <span class="fw-bold text-danger">$748.00</span>
+                            </div>
+                            <div class="col-4">
+                                <span class="d-block text-muted">BENEFICIO</span>
+                                <span class="fw-bold text-dark">Puntos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Diccionario -->
+    <div class="tab-pane fade" id="pills-diccionario" role="tabpanel">
+        <h3 class="fw-bold mb-4 text-dark"><i class="fa-solid fa-book-open text-widata me-2"></i> Diccionario Financiero
+        </h3>
+
+        <div class="accordion accordion-flush bg-white rounded-3 shadow-sm border" id="diccionarioAccordion">
+            <!-- Item 1 -->
+            <div class="accordion-item rounded-3">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#dic1">
+                        Fecha de Corte vs Fecha de Pago
+                    </button>
+                </h2>
+                <div id="dic1" class="accordion-collapse collapse" data-bs-parent="#diccionarioAccordion">
+                    <div class="accordion-body bg-light text-muted small p-4">
+                        <strong>Fecha de Corte:</strong> El día que el banco cierra tu estado de cuenta. Suma todo lo
+                        que compraste. A partir de ese día, todas tus nuevas compras pasan al mes siguiente.<br><br>
+                        <strong>Fecha de Pago Límite:</strong> Generalmente 20 días después de tu fecha de corte. Es tu
+                        día tope para pagar sin que el banco te cobre intereses.<br><br>
+                        <span class="badge bg-widata">Ejemplo Visual</span><br>
+                        Si tu corte es el día 5. Las compras del 6 de Enero al 5 de Febrero, las tienes que pagar como
+                        máximo el 25 de Febrero. ¡Esto te da hasta 50 días de financiamiento gratuito!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="accordion-item border-top">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#dic2">
+                        Pago para No Generar Intereses (Totalero)
+                    </button>
+                </h2>
+                <div id="dic2" class="accordion-collapse collapse" data-bs-parent="#diccionarioAccordion">
+                    <div class="accordion-body bg-light text-muted small p-4">
+                        Es el monto exacto que debes pagarle al banco antes de tu fecha límite para que tu
+                        financiamiento sea gratuito (0% de interés). Un "Totalero" es la persona que siempre paga este
+                        monto completo mes a mes sin falta.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="accordion-item border-top">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#dic3">
+                        Pago Mínimo
+                    </button>
+                </h2>
+                <div id="dic3" class="accordion-collapse collapse" data-bs-parent="#diccionarioAccordion">
+                    <div class="accordion-body bg-light text-muted small p-4">
+                        Es el pago más pequeño que el banco te exige mes con mes para no reportarte negativamente al
+                        Buró de Crédito. <strong>¡Cuidado!</strong> Pagar solo el mínimo es una trampa. Todo lo que te
+                        falte generará intereses compuestos enormes.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="accordion-item border-top">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#dic4">
+                        Índice de Utilización
+                    </button>
+                </h2>
+                <div id="dic4" class="accordion-collapse collapse" data-bs-parent="#diccionarioAccordion">
+                    <div class="accordion-body bg-light text-muted small p-4">
+                        Es la métrica más importante de tu Score Crediticio. Es la división entre lo que debes (deuda) y
+                        lo que tienes aprobado (límite total).<br><br>
+                        <span class="badge bg-danger">Ejemplo:</span> Si tu límite crediticio sumando todas tus tarjetas
+                        es $10,000, y actualmente debes $4,500. Tu índice de utilización es del 45%. Para tener un Score
+                        Excelente, debes mantenerlo por debajo del 30%. ¡Widata hace este cálculo por ti!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="accordion-item border-top">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fw-bold text-dark collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#dic5">
+                        CAT (Costo Anual Total)
+                    </button>
+                </h2>
+                <div id="dic5" class="accordion-collapse collapse" data-bs-parent="#diccionarioAccordion">
+                    <div class="accordion-body bg-light text-muted small p-4">
+                        Es una medida en porcentaje que te permite comparar cuánto cuesta realmente un crédito. Incluye
+                        la tasa de interés, comisiones, anualidad y seguros obligatorios si aplican. Entre más bajo, más
+                        barato.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

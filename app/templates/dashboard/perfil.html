@@ -1,0 +1,70 @@
+{% extends "dashboard_base.html" %}
+{% block dashboard_content %}
+<div class="row g-4">
+    <!-- Profile Card -->
+    <div class="col-lg-4">
+        <div class="w-card text-center">
+            <div class="mx-auto mb-4" style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--wi-purple), var(--wi-purple-light)); display: flex; align-items: center; justify-content: center; font-size: 42px; color: white;">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <h4 class="fw-bold">{{ current_user.nombre }} {{ current_user.apellidos }}</h4>
+            <p class="text-muted mb-1"><i class="fa-solid fa-envelope me-1"></i> {{ current_user.email }}</p>
+            <p class="text-muted mb-1"><i class="fa-solid fa-phone me-1"></i> {{ current_user.telefono or 'Sin teléfono' }}</p>
+            <p class="text-muted mb-3"><i class="fa-solid fa-cake-candles me-1"></i> {{ current_user.edad }} años</p>
+            
+            <div style="padding: 16px; border-radius: 16px; background: rgba(130,10,209,0.08); border: 1px solid var(--wi-border-light);">
+                <small class="text-muted d-block mb-1">Miembro desde</small>
+                <span class="fw-bold" style="color: var(--wi-purple-light);">
+                    {% if current_user.fecha_registro %}
+                        {{ current_user.fecha_registro.strftime('%d/%m/%Y') }}
+                    {% else %}
+                        Fecha no disponible
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="col-lg-8">
+        <div class="w-card">
+            <h4 class="fw-bold mb-1"><i class="fa-solid fa-pen-to-square me-2" style="color: var(--wi-purple-light);"></i> Editar Perfil</h4>
+            <p class="text-muted mb-4">Actualiza tu información personal.</p>
+
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="row g-3">
+                    <div class="col-md-6 mb-3">
+                        {{ form.nombre.label(class="form-label fw-semibold") }}
+                        {{ form.nombre(class="form-control" + (" is-invalid" if form.nombre.errors else ""), value=current_user.nombre) }}
+                        {% for error in form.nombre.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.apellidos.label(class="form-label fw-semibold") }}
+                        {{ form.apellidos(class="form-control" + (" is-invalid" if form.apellidos.errors else ""), value=current_user.apellidos) }}
+                        {% for error in form.apellidos.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.edad.label(class="form-label fw-semibold") }}
+                        {{ form.edad(class="form-control" + (" is-invalid" if form.edad.errors else ""), value=current_user.edad) }}
+                        {% for error in form.edad.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        {{ form.telefono.label(class="form-label fw-semibold") }}
+                        {{ form.telefono(class="form-control" + (" is-invalid" if form.telefono.errors else ""), value=current_user.telefono or '') }}
+                        {% for error in form.telefono.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-semibold">Correo Electrónico</label>
+                        <input type="email" class="form-control" value="{{ current_user.email }}" disabled>
+                        <small class="text-muted">El correo no se puede modificar.</small>
+                    </div>
+                </div>
+                <div class="d-grid mt-3">
+                    {{ form.submit(class="btn btn-widata btn-lg rounded-pill fw-bold shadow") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
