@@ -5,7 +5,9 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'super-secret-key-widata'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'mysql+pymysql://root:root@localhost/bancos_mexico'
+    
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'mysql+pymysql://root:bd2025%2B@localhost/bancos_mexico'
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # SMTP Settings for Password Recovery
