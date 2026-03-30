@@ -1,10 +1,10 @@
 {% extends "dashboard_base.html" %}
-{% block title %}Detector de Fugas - Widata{% endblock %}
+{% block title %}Detector de Fugas IA - Widata{% endblock %}
 {% block dashboard_content %}
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <div>
-        <h1 class="h3 mb-1 text-gray-800 fw-bold">Detector de Fugas</h1>
-        <p class="text-muted mb-0">Rastrea tus gastos diarios y clasifícalos para detectar patrones.</p>
+        <h1 class="h3 mb-1 text-gray-800 fw-bold"><i class="fa-solid fa-robot me-2" style="color: var(--wi-cyan);"></i>Detector de Fugas IA</h1>
+        <p class="text-muted mb-0">Registra tus gastos y la <strong>IA clasifica automáticamente</strong> el tipo de fuga.</p>
     </div>
 </div>
 
@@ -37,6 +37,27 @@
     </div>
 </div>
 
+<!-- Banner de clasificación IA -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert border-0 rounded-4 shadow-sm" style="background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(130,10,209,0.1)); border: 1px solid var(--wi-border-light) !important;">
+            <div class="d-flex align-items-center">
+                <i class="fa-solid fa-microchip me-3" style="font-size: 28px; color: var(--wi-cyan);"></i>
+                <div>
+                    <strong style="color: var(--wi-text);">🤖 Clasificación Inteligente Activada</strong>
+                    <p class="mb-0 small text-muted mt-1">
+                        La IA analiza la <strong>descripción</strong> y el <strong>monto</strong> de cada gasto para determinar
+                        automáticamente si es un <span class="badge bg-danger bg-opacity-10 text-danger border border-danger">🐜 Hormiga</span>,
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success">📌 Fijo</span> o
+                        <span class="badge bg-warning bg-opacity-10 text-dark border border-warning">🎯 Variable</span>.
+                        Ya no necesitas elegir manualmente.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <!-- Tabla de gastos -->
     <div class="col-lg-8 mb-4">
@@ -52,7 +73,7 @@
                             <tr>
                                 <th class="px-4">Fecha</th>
                                 <th>Descripción</th>
-                                <th>Categoría</th>
+                                <th>Categoría IA</th>
                                 <th class="text-end px-4">Monto</th>
                             </tr>
                         </thead>
@@ -66,14 +87,19 @@
                                         {% if g.categoria.nombre == 'Hormiga' %} bg-danger bg-opacity-10 text-danger border-danger
                                         {% elif g.categoria.nombre == 'Variable' %} bg-warning bg-opacity-10 text-dark border-warning
                                         {% else %} bg-success bg-opacity-10 text-success border-success {% endif %}">
+                                        {% if g.categoria.nombre == 'Hormiga' %}🐜{% elif g.categoria.nombre == 'Fijo' %}📌{% else %}🎯{% endif %}
                                         {{ g.categoria.nombre }}
+                                        <i class="fa-solid fa-robot ms-1" style="font-size: 10px; opacity: 0.6;" title="Clasificado por IA"></i>
                                     </span>
                                 </td>
                                 <td class="text-end fw-bold text-danger px-4">-${{ "{:,.2f}".format(g.monto) }}</td>
                             </tr>
                             {% else %}
                             <tr>
-                                <td colspan="4" class="text-center py-5 text-muted">Aún no hay registros de gastos.</td>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-inbox" style="font-size: 40px; opacity: 0.3;"></i>
+                                    <p class="mt-2 mb-0">Aún no hay registros de gastos. Registra tu primer gasto y la IA lo clasificará.</p>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -83,7 +109,7 @@
         </div>
     </div>
 
-    <!-- Formulario Nuevo Gasto -->
+    <!-- Formulario Nuevo Gasto (Sin selección manual de categoría) -->
     <div class="col-lg-4 mb-4">
         <div class="w-card shadow-sm bg-light">
             <div class="card-header bg-white py-3 border-bottom">
@@ -95,9 +121,13 @@
                     {{ form.hidden_tag() }}
                     <div class="mb-3">
                         <label class="form-label small fw-bold">Descripción / Concepto</label>
-                        {{ form.descripcion(class="form-control", placeholder="Ej. Café matutino, Cines, Comida") }}
+                        {{ form.descripcion(class="form-control", placeholder="Ej. Café matutino, Netflix, Renta...") }}
                         {% for error in form.descripcion.errors %}<div class="text-danger small">{{ error }}</div>{%
                         endfor %}
+                        <small class="text-muted mt-1 d-block">
+                            <i class="fa-solid fa-robot" style="color: var(--wi-cyan);"></i>
+                            La IA usará esto para clasificar el tipo de fuga.
+                        </small>
                     </div>
 
                     <div class="row">
@@ -119,11 +149,15 @@
                         </div>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold">Categorización Algorítmica</label>
-                        {{ form.categoria_id(class="form-select") }}
-                        <small class="text-muted mt-1 d-block"><i class="fa-solid fa-circle-info"></i> Elige
-                            cuidadosamente. Los gastos "Hormiga" drenarán tu calificación.</small>
+                    <!-- Indicador de IA en lugar de select manual -->
+                    <div class="mb-4 p-3 rounded-4" style="background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.2);">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-brain me-2" style="color: var(--wi-cyan); font-size: 20px;"></i>
+                            <div>
+                                <small class="fw-bold" style="color: var(--wi-cyan);">Clasificación Automática</small>
+                                <small class="text-muted d-block">La IA analizará la descripción y monto para clasificar tu gasto.</small>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="d-grid">

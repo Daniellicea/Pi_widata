@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Código QR - Widata{% endblock %}
+{% block content %}
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="w-card text-center p-5" style="max-width: 600px; width: 100%;">
+        <!-- Header -->
+        <div class="mb-4">
+            <div class="icon-box mx-auto mb-3" style="width: 80px; height: 80px; font-size: 36px;">
+                <i class="fa-solid fa-qrcode"></i>
+            </div>
+            <h2 class="fw-bold" style="color: var(--wi-text);">
+                <i class="fa-solid fa-chart-simple text-gradient me-2"></i>Widata
+            </h2>
+            <p class="text-muted">Escanea el código QR para acceder a la plataforma</p>
+        </div>
+
+        <!-- QR Image -->
+        <div class="mb-4 p-4 rounded-4 mx-auto" 
+             style="background: white; display: inline-block; border: 3px solid var(--wi-purple); box-shadow: 0 10px 40px rgba(130,10,209,0.3);">
+            <img src="{{ url_for('main.generar_qr') }}" 
+                 alt="Código QR de Widata" 
+                 style="width: 256px; height: 256px; image-rendering: pixelated;"
+                 id="qrImage">
+        </div>
+
+
+        <!-- Info Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-4">
+                <div class="p-3 rounded-3" style="background: rgba(130,10,209,0.06); border: 1px solid var(--wi-border-light);">
+                    <i class="fa-solid fa-mobile-screen-button d-block mb-1" style="font-size: 24px; color: var(--wi-purple-light);"></i>
+                    <small class="fw-bold">Escanear</small>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="p-3 rounded-3" style="background: rgba(6,182,212,0.06); border: 1px solid var(--wi-border-light);">
+                    <i class="fa-solid fa-user-plus d-block mb-1" style="font-size: 24px; color: var(--wi-cyan);"></i>
+                    <small class="fw-bold">Registrarse</small>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="p-3 rounded-3" style="background: rgba(16,185,129,0.06); border: 1px solid var(--wi-border-light);">
+                    <i class="fa-solid fa-chart-pie d-block mb-1" style="font-size: 24px; color: var(--wi-green);"></i>
+                    <small class="fw-bold">Explorar</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-grid gap-2">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-widata btn-lg rounded-pill fw-bold shadow">
+                <i class="fa-solid fa-rocket me-2"></i>Comenzar Ahora
+            </a>
+            <a href="{{ url_for('main.generar_qr') }}" download="widata_qr.png" class="btn btn-outline-light rounded-pill">
+                <i class="fa-solid fa-download me-2"></i>Descargar QR
+            </a>
+        </div>
+
+        <p class="text-muted small mt-4 mb-0">
+            <i class="fa-solid fa-shield-halved me-1"></i>
+            Plataforma de educación financiera con IA. 100% segura.
+        </p>
+    </div>
+</div>
+{% endblock %}

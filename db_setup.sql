@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     telefono VARCHAR(20),
     email VARCHAR(150) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
+    avatar_url VARCHAR(500),
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_email (email)
 );

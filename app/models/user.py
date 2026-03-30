@@ -15,6 +15,7 @@ class Usuario(db.Model, UserMixin):
     telefono = db.Column(db.String(20))
     email = db.Column(db.String(150), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
+    avatar_url = db.Column(db.String(500), nullable=True)
     fecha_registro = db.Column(db.DateTime, default=datetime.utcnow)
 
     creditos = db.relationship('Credito', backref='usuario', lazy=True, cascade='all, delete-orphan')

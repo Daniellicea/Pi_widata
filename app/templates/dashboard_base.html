@@ -19,9 +19,16 @@
                 <i class="fa-solid fa-chart-simple text-gradient me-2"></i> Widata
             </a>
             <div class="d-flex align-items-center gap-2">
-                <span class="fw-medium" style="color: var(--wi-text-secondary);"><i class="fa-regular fa-user me-1"></i> {{ current_user.nombre }}</span>
-                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light btn-sm rounded-pill px-3">Salir</a>
-            </div>
+                <span class="fw-medium" style="color: var(--wi-text-secondary);">
+                    {% if current_user.avatar_url and current_user.avatar_url.startswith('ai_avatar:') %}
+                        <span style="font-size: 20px; margin-right: 4px;">{{ {'profesional': '💼', 'astronauta': '🚀', 'artista': '🎨', 'gamer': '🎮', 'científico': '🔬', 'chef': '👨‍🍳', 'músico': '🎵', 'deportista': '⚽', 'viajero': '✈️', 'programador': '💻', 'naturaleza': '🌿', 'superhéroe': '🦸', 'robot': '🤖', 'gato': '🐱', 'perro': '🐕', 'fantasía': '🧙'}.get(current_user.avatar_url.replace('ai_avatar:', ''), '👤') }}</span>
+                    {% else %}
+                        <i class="fa-regular fa-user me-1"></i>
+                    {% endif %}
+                    {{ current_user.nombre }}
+                </span>
+<a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light btn-sm rounded-pill px-3" onclick="localStorage.clear(); sessionStorage.clear();">Salir</a>   
+</form>            </div>
         </div>
     </nav>
 
