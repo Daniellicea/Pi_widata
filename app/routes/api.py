@@ -1,5 +1,5 @@
 import uuid
-
+from app import csrf
 from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify
 from app import db
@@ -8,8 +8,36 @@ from app.models.financial import Credito
 from app.services.email_service import send_reset_email
 from flask_wtf.csrf import generate_csrf
 
+from flask import send_file
+import io
+from app.services.huggingface import generar_imagen
+
+
+
+
 api = Blueprint('api', __name__)
 
+
+from app import csrf
+from flask import send_file, request
+import io
+from app.services.huggingface import generar_imagen
+
+@api.route("/generate", methods=["POST"])
+@csrf.exempt
+def generate():
+    data = request.get_json()
+    prompt = data.get("prompt")
+
+    if not prompt:
+        return {"error": "Prompt requerido"}, 400
+
+    imagen = generar_imagen(prompt)
+
+    return send_file(
+        io.BytesIO(imagen),
+        mimetype='image/png'
+    )
 
 @api.route('/csrf-token', methods=['GET'])
 def get_csrf_token():
